@@ -16,12 +16,14 @@ import argparse
 
 def nmap_scan(host, ports):
     nm = nmap.PortScanner()
-    nm.scan(host, ports)
+    nm.scan(hosts=host, ports=ports, arguments='-sT -sV -O -n -T4')
 
-    for host in nm.all_hosts():
-        print(host)
-    # state = nm[host]['tcp'][int(port)]['state']
-    # print("[*] " + host + " tcp/" + port + " " + state)
+    print("Host Information: " + host)
+    for port in nm[host].all_tcp():
+        state = nm[host]['tcp'][port]['state']
+        name = nm[host]['tcp'][port]['name']
+        product = nm[host]['tcp'][port]['product']
+        print("[*] tcp/%d %s %s %s" % (port, state, name, product))
 
 
 def main():
